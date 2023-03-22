@@ -16,9 +16,10 @@ body {
   align-content: center;
 }
 
-.grid-container {
+.basement {
   height: 90vh;
-  width: 27%;
+  width: 100%;
+  margin-top: 1%;
   border: 2rem solid white;
   background-color: white;
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
