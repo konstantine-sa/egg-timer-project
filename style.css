@@ -14,6 +14,8 @@ body {
   grid-template-columns: 1fr;
   justify-items: center;
   align-content: center;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .basement {
@@ -68,6 +70,7 @@ body {
   font-size: 3rem;
   font-weight: 500;
   color: #c6c6c6;
+  cursor: pointer;
 }
 
 .egg,
@@ -98,6 +101,10 @@ p {
   justify-items: center;
   align-items: center;
   text-align: center;
+}
+
+.yolk-type__item {
+  cursor: pointer;
 }
 
 .yolk-type p {
