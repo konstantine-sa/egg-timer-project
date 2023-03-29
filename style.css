@@ -138,16 +138,9 @@ p {
 }
 
 .pan-lid img {
-  height: 10rem;
-  /* transform: rotate(-2deg); */
-}
-
-.pan-lid__text--start {
-  position: absolute;
-  padding-top: 2rem;
-  font-size: 3rem;
-  font-weight: 900;
-  color: #ffffff;
+  height: 4.2rem;
+  transform: rotate(-1.5deg);
+  margin-bottom: 1rem;
 }
 
 .pan {
@@ -181,7 +174,7 @@ p {
 }
 
 /***************************************************************** Buttons */
-/* .button {
+.button {
   width: 4rem;
   height: 4rem;
   position: relative;
@@ -200,7 +193,7 @@ p {
 .button.stop {
   left: 13rem;
   color: #2c5051;
-} */
+}
 /***************************************************************** Buttons */
 
 /* Progress indicator */

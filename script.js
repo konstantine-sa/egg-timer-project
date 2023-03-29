@@ -1,3 +1,9 @@
+const egg_small = document.querySelector(".egg--size-s");
+
+egg_small.onclick = function () {
+  egg_small.classList.add = "egg--selected";
+};
+
 //Timer module
 const semicircles = document.querySelectorAll(".semicircle");
 const timer = document.querySelector(".timer");
