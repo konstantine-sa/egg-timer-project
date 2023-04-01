@@ -1,10 +1,21 @@
 //global variables
-const weightRatio = calculateWeightRatio();
-var yolkTypeRatio = 0;
-var cookingTime = weightRatio + yolkTypeRatio;
-
 const eggSize = document.querySelectorAll(".egg");
 const yolkType = document.querySelectorAll(".yolk-type__item ");
+const lid = document.querySelector(".pan-lid");
+const buttonPlay = document.querySelector(".play");
+const buttonStop = document.querySelector(".stop");
+
+var timeInSeconds = 0;
+var weightRatio = 1.16667; // set the default weight ratio
+var yolkTypeRatio = 360; // set the default yolkTypeRatio
+
+timeInSecondsCalc();
+
+function timeInSecondsCalc() {
+  timeInSeconds = weightRatio * yolkTypeRatio;
+}
+
+console.log("Weight Ratio: " + weightRatio);
 
 function selectEggSize() {
   // looping through each egg
@@ -20,7 +31,10 @@ function selectEggSize() {
       egg.classList.add("egg--selected");
 
       //getting weight of the selected egg
-      const weightRatio = calculateWeightRatio();
+      weightRatio = calculateWeightRatio();
+      // timeInSeconds = weightRatio * yolkTypeRatio; // update timeInSeconds based on weightRatio
+
+      timeInSeconds = weightRatio * yolkTypeRatio;
       console.log("Weight Ratio: " + weightRatio); //*******************************TO REMOVE AFTER DEBUGGING!*****************************
     });
   });
@@ -36,6 +50,7 @@ function selectYolkType() {
       egg.classList.add("yolk-type__item--selected");
 
       yolkTypeRatio = parseFloat(egg.dataset.value);
+      timeInSeconds = weightRatio * yolkTypeRatio;
       console.log("YolkType Ratio: " + yolkTypeRatio); //*******************************TO REMOVE AFTER DEBUGGING!*****************************
     });
   });
@@ -62,73 +77,115 @@ function calculateWeightRatio() {
 selectEggSize();
 selectYolkType();
 
-//Timer module
-const semicircles = document.querySelectorAll(".semicircle");
-const timer = document.querySelector(".timer");
+let timerLoop;
 
-//input
-const min = 0;
-const sec = cookingTime;
+buttonPlay.addEventListener("click", function start() {
+  timeInSecondsCalc();
 
-const minutes = min * 60000;
-const seconds = sec * 1000;
-const setTime = minutes + seconds;
-const startTime = Date.now();
-const futureTime = startTime + setTime;
+  //Closing the lid
+  lid.classList.add("pan-lid--closed");
 
-const timerLoop = setInterval(countDownTimer);
-countDownTimer();
+  //Timer module
+  const semicircles = document.querySelectorAll(".semicircle");
+  const timer = document.querySelector(".timer");
 
-function countDownTimer() {
-  const currentTime = Date.now();
-  const remainingTime = futureTime - currentTime;
-  const angle = (remainingTime / setTime) * 360;
+  //input
+  const min = Math.floor(timeInSeconds / 60);
+  const sec = timeInSeconds % 60;
 
-  //Progress indicator
-  if (angle > 180) {
-    semicircles[2].style.display = "none";
-    semicircles[0].style.transform = "rotate(180deg)";
-    semicircles[1].style.transform = `rotate(${angle}deg)`;
-  } else {
-    semicircles[2].style.display = "block";
-    semicircles[0].style.transform = `rotate(${angle}deg)`;
-    semicircles[1].style.transform = `rotate(${angle}deg)`;
-  }
-  //Timer
-  const mins = Math.floor((remainingTime / (1000 * 60)) % 60).toLocaleString(
-    "en-US",
-    { minimumIntegerDigits: 2, useGrouping: false }
-  );
-  const secs = Math.floor((remainingTime / 1000) % 60).toLocaleString("en-US", {
-    minimumIntegerDigits: 2,
-    useGrouping: false,
-  });
+  const minutes = min * 60000;
+  const seconds = sec * 1000;
+  const setTime = minutes + seconds;
+  const startTime = Date.now();
+  const futureTime = startTime + setTime;
 
-  timer.innerHTML = `
+  timerLoop = setInterval(countDownTimer);
+  countDownTimer();
+
+  function countDownTimer() {
+    const currentTime = Date.now();
+    const remainingTime = futureTime - currentTime;
+    const angle = (remainingTime / setTime) * 360;
+
+    //Progress indicator
+    if (angle > 180) {
+      semicircles[2].style.display = "none";
+      semicircles[0].style.transform = "rotate(180deg)";
+      semicircles[1].style.transform = `rotate(${angle}deg)`;
+    } else {
+      semicircles[2].style.display = "block";
+      semicircles[0].style.transform = `rotate(${angle}deg)`;
+      semicircles[1].style.transform = `rotate(${angle}deg)`;
+    }
+    //Timer
+    const mins = Math.floor((remainingTime / (1000 * 60)) % 60).toLocaleString(
+      "en-US",
+      { minimumIntegerDigits: 2, useGrouping: false }
+    );
+    const secs = Math.floor((remainingTime / 1000) % 60).toLocaleString(
+      "en-US",
+      {
+        minimumIntegerDigits: 2,
+        useGrouping: false,
+      }
+    );
+
+    timer.innerHTML = `
   <div >${mins}</div>
   <div class="colon">:</div>
   <div>${secs}</div>
   `;
-  timer.style.color = "#fff";
+    timer.style.color = "#fff";
 
-  //10-sec condition
-  if (remainingTime <= 10000) {
-    semicircles[0].style.backgroundColor = "red";
-    semicircles[1].style.backgroundColor = "red";
-    timer.style.color = "red";
-  }
-  //end
-  if (remainingTime < 0) {
-    clearInterval(timerLoop);
-    semicircles[0].style.display = "none";
-    semicircles[1].style.display = "none";
-    semicircles[2].style.display = "none";
+    //10-sec condition
+    if (remainingTime <= 10000) {
+      semicircles[0].style.backgroundColor = "red";
+      semicircles[1].style.backgroundColor = "red";
+      timer.style.color = "red";
+    }
+    //end
+    if (remainingTime < 0) {
+      clearInterval(timerLoop);
+      semicircles[0].style.display = "none";
+      semicircles[1].style.display = "none";
+      semicircles[2].style.display = "none";
 
-    timer.innerHTML = `
+      timer.innerHTML = `
   <div >00</div>
   <div class="colon">:</div>
   <div>00</div>`;
 
-    timer.style.color = "#bbac9a";
+      timer.style.color = "#bbac9a";
+    }
   }
+
+  return timeInSeconds;
+});
+
+//Reseting timer and progress circle
+function resetTimer() {
+  clearInterval(timerLoop);
+  timeInSecondsCalc();
+  const semicircles = document.querySelectorAll(".semicircle");
+  const timer = document.querySelector(".timer");
+
+  // seting the semicircles to their default state
+  semicircles[0].style.transform = "rotate(0deg)";
+  semicircles[1].style.transform = "rotate(0deg)";
+  semicircles[2].style.display = "block";
+
+  // seting the timer to its default state
+  timer.innerHTML = `
+    <div>00</div>
+    <div class="colon">:</div>
+    <div>00</div>
+  `;
+  timer.style.color = "#bbac9a";
 }
+
+buttonStop.addEventListener("click", function stop() {
+  resetTimer();
+  //Opening the lid
+  //Closing the lid
+  lid.classList.remove("pan-lid--closed");
+});

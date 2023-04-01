@@ -141,7 +141,17 @@ p {
   justify-content: center;
   align-items: center;
   padding-bottom: 1rem;
-  transform: rotate(-3deg);
+  transform: rotate(-4deg);
+  transition: all 0.3s;
+  transition-timing-function: ease-out;
+}
+
+.pan-lid--closed {
+  margin-bottom: -2rem;
+  padding-bottom: 0rem;
+  transform: rotate(1.4deg);
+  transition: all 0.3s;
+  transition-timing-function: ease-out;
 }
 
 .pan-lid img {
@@ -284,6 +294,7 @@ p {
   width: 20rem;
   height: 10rem;
   z-index: 7;
+  color: #bbac9a;
 }
 
 .timer .colon {
