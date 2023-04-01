@@ -92,6 +92,7 @@ p {
   font-size: 1.8rem;
   font-weight: 700;
   color: #e9e8e8;
+  filter: drop-shadow(3px 4px 5px rgb(0 0 0 / 0.4));
 }
 
 .yolk-type {
@@ -194,12 +195,19 @@ p {
 .button {
   width: 4rem;
   height: 4rem;
+  display: block;
   position: relative;
   bottom: 8rem;
   bottom: 1rem;
   z-index: 15;
+  cursor: pointer;
 
-  filter: drop-shadow(3px 5px 4px rgb(0 0 0 / 0.2));
+  filter: drop-shadow(3px 5px 7px rgb(0 0 0 / 0.4));
+}
+
+.button:active {
+  filter: brightness(85%);
+  filter: drop-shadow(2px 2px 3px rgb(0 0 0 / 0.4));
 }
 
 .button.play {
