@@ -206,7 +206,7 @@ buttonStop.addEventListener("click", function stop() {
 createBubble = () => {
   const bubblesSection = document.querySelector(".bubbles");
   const createElement = document.createElement("span");
-  let size = Math.random() * 50;
+  let size = Math.random() * 30;
 
   createElement.style.width = size + "px";
   createElement.style.height = size + "px";
@@ -219,7 +219,7 @@ createBubble = () => {
 };
 
 function startBubbleInterval() {
-  bubbleInterval = setInterval(createBubble, 20);
+  bubbleInterval = setInterval(createBubble, 10);
 }
 
 function stopBubbleInterval() {
