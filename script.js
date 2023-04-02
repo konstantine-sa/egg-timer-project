@@ -5,9 +5,9 @@ const lid = document.querySelector(".pan-lid");
 const buttonPlay = document.querySelector(".play");
 const buttonStop = document.querySelector(".stop");
 
-var timeInSeconds = 0;
-var weightRatio = 1.16667; // set the default weight ratio
-var yolkTypeRatio = 360; // set the default yolkTypeRatio
+let timeInSeconds = 0;
+let weightRatio = 1.16667; // set the default weight ratio
+let yolkTypeRatio = 360; // set the default yolkTypeRatio
 
 timeInSecondsCalc();
 
@@ -82,84 +82,89 @@ let timerLoop;
 buttonPlay.addEventListener("click", function start() {
   timeInSecondsCalc();
 
-  //Closing the lid
-  lid.classList.add("pan-lid--closed");
+  if (
+    document.querySelector(".semicircle").style.transform === "rotate(0deg)"
+  ) {
+    //Closing the lid
+    lid.classList.add("pan-lid--closed");
 
-  //Timer module
-  const semicircles = document.querySelectorAll(".semicircle");
-  const timer = document.querySelector(".timer");
+    //Timer module
+    const semicircles = document.querySelectorAll(".semicircle");
+    const timer = document.querySelector(".timer");
 
-  //input
-  const min = Math.floor(timeInSeconds / 60);
-  const sec = timeInSeconds % 60;
+    //input
+    const min = Math.floor(timeInSeconds / 60);
+    const sec = timeInSeconds % 60;
 
-  const minutes = min * 60000;
-  const seconds = sec * 1000;
-  const setTime = minutes + seconds;
-  const startTime = Date.now();
-  const futureTime = startTime + setTime;
+    const minutes = min * 60000;
+    const seconds = sec * 1000;
+    const setTime = minutes + seconds;
+    const startTime = Date.now();
+    const futureTime = startTime + setTime;
 
-  timerLoop = setInterval(countDownTimer);
-  countDownTimer();
+    timerLoop = setInterval(countDownTimer);
+    countDownTimer();
 
-  function countDownTimer() {
-    const currentTime = Date.now();
-    const remainingTime = futureTime - currentTime;
-    const angle = (remainingTime / setTime) * 360;
+    function countDownTimer() {
+      const currentTime = Date.now();
+      let remainingTime = futureTime - currentTime;
+      const angle = (remainingTime / setTime) * 360;
 
-    //Progress indicator
-    if (angle > 180) {
-      semicircles[2].style.display = "none";
-      semicircles[0].style.transform = "rotate(180deg)";
-      semicircles[1].style.transform = `rotate(${angle}deg)`;
-    } else {
-      semicircles[2].style.display = "block";
-      semicircles[0].style.transform = `rotate(${angle}deg)`;
-      semicircles[1].style.transform = `rotate(${angle}deg)`;
-    }
-    //Timer
-    const mins = Math.floor((remainingTime / (1000 * 60)) % 60).toLocaleString(
-      "en-US",
-      { minimumIntegerDigits: 2, useGrouping: false }
-    );
-    const secs = Math.floor((remainingTime / 1000) % 60).toLocaleString(
-      "en-US",
-      {
+      //Progress indicator
+      if (angle > 180) {
+        semicircles[2].style.display = "none";
+        semicircles[0].style.transform = "rotate(180deg)";
+        semicircles[1].style.transform = `rotate(${angle}deg)`;
+      } else {
+        semicircles[2].style.display = "block";
+        semicircles[0].style.transform = `rotate(${angle}deg)`;
+        semicircles[1].style.transform = `rotate(${angle}deg)`;
+      }
+      //Timer
+      const mins = Math.floor(
+        (remainingTime / (1000 * 60)) % 60
+      ).toLocaleString("en-US", {
         minimumIntegerDigits: 2,
         useGrouping: false,
-      }
-    );
-
-    timer.innerHTML = `
-  <div >${mins}</div>
-  <div class="colon">:</div>
-  <div>${secs}</div>
-  `;
-    timer.style.color = "#fff";
-
-    //10-sec condition
-    if (remainingTime <= 10000) {
-      semicircles[0].style.backgroundColor = "red";
-      semicircles[1].style.backgroundColor = "red";
-      timer.style.color = "red";
-    }
-    //end
-    if (remainingTime < 0) {
-      clearInterval(timerLoop);
-      semicircles[0].style.display = "none";
-      semicircles[1].style.display = "none";
-      semicircles[2].style.display = "none";
+      });
+      const secs = Math.floor((remainingTime / 1000) % 60).toLocaleString(
+        "en-US",
+        {
+          minimumIntegerDigits: 2,
+          useGrouping: false,
+        }
+      );
 
       timer.innerHTML = `
-  <div >00</div>
-  <div class="colon">:</div>
-  <div>00</div>`;
+        <div >${mins}</div>
+        <div class="colon">:</div>
+        <div>${secs}</div>
+      `;
+      timer.style.color = "#fff";
 
-      timer.style.color = "#bbac9a";
+      //10-sec condition
+      if (remainingTime <= 10000) {
+        semicircles[0].style.backgroundColor = "red";
+        semicircles[1].style.backgroundColor = "red";
+        timer.style.color = "red";
+      }
+      //end
+      if ((remainingTime = 0)) {
+        clearInterval(timerLoop);
+        semicircles[0].style.display = "none";
+        semicircles[1].style.display = "none";
+        semicircles[2].style.display = "none";
+
+        timer.innerHTML = `
+          <div >00</div>
+          <div class="colon">:</div>
+          <div>00</div>
+        `;
+        buttonPlay.disabled = false;
+        buttonStop.disabled = true;
+      }
     }
   }
-
-  return timeInSeconds;
 });
 
 //Reseting timer and progress circle
