@@ -8,6 +8,7 @@ const buttonStop = document.querySelector(".stop");
 let timeInSeconds = 0;
 let weightRatio = 1.16667; // set the default weight ratio
 let yolkTypeRatio = 360; // set the default yolkTypeRatio
+let bubbleInterval;
 
 timeInSecondsCalc();
 
@@ -87,6 +88,9 @@ buttonPlay.addEventListener("click", function start() {
   ) {
     //Closing the lid
     lid.classList.add("pan-lid--closed");
+
+    //Starting bubbles
+    startBubbleInterval();
 
     //Timer module
     const semicircles = document.querySelectorAll(".semicircle");
@@ -193,4 +197,31 @@ buttonStop.addEventListener("click", function stop() {
   //Opening the lid
   //Closing the lid
   lid.classList.remove("pan-lid--closed");
+
+  //Stopping bubbles
+  stopBubbleInterval();
 });
+
+//bubbles
+createBubble = () => {
+  const bubblesSection = document.querySelector(".bubbles");
+  const createElement = document.createElement("span");
+  let size = Math.random() * 50;
+
+  createElement.style.width = size + "px";
+  createElement.style.height = size + "px";
+  createElement.style.left = Math.random() * innerWidth + "px";
+  bubblesSection.appendChild(createElement);
+
+  setTimeout(() => {
+    createElement.remove();
+  }, 3000);
+};
+
+function startBubbleInterval() {
+  bubbleInterval = setInterval(createBubble, 20);
+}
+
+function stopBubbleInterval() {
+  clearInterval(bubbleInterval);
+}
